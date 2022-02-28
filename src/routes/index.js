@@ -1,5 +1,4 @@
 import { Routes, Route } from 'react-router-dom';
-import * as _ from 'lodash';
 import * as cuid from 'cuid';
 
 // routes
@@ -16,9 +15,9 @@ export default function ThemeRoutes() {
             {availableRoutes.map((appRoute) => {
                 const { path, children, element } = appRoute;
                 return (
-                    <Route path={path} element={element}>
+                    <Route key={cuid()} path={path} element={element}>
                         {children.map((child) => (
-                            <Route path={child.path} element={child.element} />
+                            <Route key={cuid()} path={child.path} element={child.element} />
                         ))}
                     </Route>
                 );
