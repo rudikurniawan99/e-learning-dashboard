@@ -1,12 +1,13 @@
 // assets
-import { IconTypography, IconPalette, IconShadow, IconWindmill } from '@tabler/icons';
+import { IconTypography, IconPalette, IconShadow, IconWindmill, IconNotebook } from '@tabler/icons';
 
 // constant
 const icons = {
     IconTypography,
     IconPalette,
     IconShadow,
-    IconWindmill
+    IconWindmill,
+    IconNotebook
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
@@ -61,6 +62,14 @@ const utilities = {
                     breadcrumbs: false
                 }
             ]
+        },
+        {
+            id: 'page-admin',
+            title: 'Admin',
+            type: 'item',
+            url: '/utils/admin',
+            icon: icons.IconNotebook,
+            breadcrumbs: false
         }
     ]
 };
