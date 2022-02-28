@@ -6,10 +6,8 @@ import reducer from './reducers';
 const { NODE_ENV } = process.env;
 
 const composeEnhancers =
-    (NODE_ENV !== 'production' && typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || // eslint-disable-line no-underscore-dangle
-    compose;
+    (NODE_ENV !== 'production' && typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
-const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk())));
-const persister = 'Free';
+const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
 
-export { store, persister };
+export default store;

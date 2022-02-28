@@ -5,22 +5,20 @@ import * as cuid from 'cuid';
 // routes
 import MainRoutes from './MainRoutes';
 import AuthenticationRoutes from './AuthenticationRoutes';
-import config from 'config';
 
 // ==============================|| ROUTING RENDER ||============================== //
 
 export default function ThemeRoutes() {
-    const availableRotues = [MainRoutes, AuthenticationRoutes];
+    const availableRoutes = [MainRoutes, AuthenticationRoutes];
 
     return (
         <Routes>
-            {_.map(availableRotues, (availableRotue) => {
-                const { element, children } = availableRotue;
-                const path = config.basename + availableRotue.path;
+            {availableRoutes.map((appRoute) => {
+                const { path, children, element } = appRoute;
                 return (
-                    <Route key={cuid()} path={path} element={element}>
-                        {_.map(children, (child) => (
-                            <Route key={cuid()} path={child.path} element={child.element} />
+                    <Route path={path} element={element}>
+                        {children.map((child) => (
+                            <Route path={child.path} element={child.element} />
                         ))}
                     </Route>
                 );
