@@ -30,8 +30,12 @@ const MainRoutes = {
             element: <DashboardDefault />
         },
         {
-            path: '/dashboard/default',
-            element: <DashboardDefault />
+            path: '/admin',
+            element: <AdminPage />
+        },
+        {
+            path: '/admin/create',
+            element: <CreateAdminPage />
         },
         {
             path: '/utils/util-typography',
@@ -44,14 +48,6 @@ const MainRoutes = {
         {
             path: '/utils/util-shadow',
             element: <UtilsShadow />
-        },
-        {
-            path: '/utils/admin',
-            element: <AdminPage />
-        },
-        {
-            path: '/utils/admin/create',
-            element: <CreateAdminPage />
         },
         {
             path: '/icons/tabler-icons',
