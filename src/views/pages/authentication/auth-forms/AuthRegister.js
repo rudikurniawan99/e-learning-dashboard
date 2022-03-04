@@ -92,7 +92,7 @@ const FirebaseRegister = ({ ...others }) => {
             >
                 {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                     <form noValidate onSubmit={handleSubmit} {...others}>
-                        <FormControl>
+                        <FormControl fullWidth error={Boolean(touched.name && errors.name)} sx={{ ...theme.typography.customInput }}>
                             <InputLabel htmlFor="outlined-adornment-name-register">Fullname</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-name-register"
