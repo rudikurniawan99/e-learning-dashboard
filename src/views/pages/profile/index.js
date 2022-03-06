@@ -1,9 +1,18 @@
 import MainCard from 'ui-component/cards/MainCard';
-import { Typography } from '@mui/material';
+import { Avatar, Grid, Typography } from '@mui/material';
 
 const ProfilePage = () => (
-    <MainCard title="Profile">
-        <Typography variant="body1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit, alias.</Typography>
+    <MainCard title="User fullname" secondary={<Avatar>P</Avatar>}>
+        <Grid container spacing={2}>
+            <Grid item xs={12} lg={6}>
+                <Typography variant="body2">Email</Typography>
+            </Grid>
+            <Grid item xs={12} lg={6}>
+                <Typography color="black" variant="body2">
+                    dummy@gmail.com
+                </Typography>
+            </Grid>
+        </Grid>
     </MainCard>
 );
 
