@@ -15,6 +15,7 @@ const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialI
 const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
 const AdminPage = Loadable(lazy(() => import('views/pages/admin')));
 const CreateAdminPage = Loadable(lazy(() => import('views/pages/admin/CreateAdmin')));
+const ProfilePage = Loadable(lazy(() => import('views/pages/profile')));
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
@@ -32,6 +33,10 @@ const MainRoutes = {
         {
             path: '/admin',
             element: <AdminPage />
+        },
+        {
+            path: '/profile',
+            element: <ProfilePage />
         },
         {
             path: '/admin/create',
