@@ -118,7 +118,7 @@ const CreateAdminPage = () => {
                                     variant="contained"
                                     color="secondary"
                                 >
-                                    Sign up
+                                    submit
                                 </Button>
                             </AnimateButton>
                         </Box>
