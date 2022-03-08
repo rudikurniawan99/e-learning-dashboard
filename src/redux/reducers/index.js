@@ -7,8 +7,8 @@ import resources from './resources';
 // ==============================|| COMBINE REDUCER ||============================== //
 
 const reducer = combineReducers({
-    customization: customizationReducer,
-    resources
+  customization: customizationReducer,
+  resources
 });
 
 export default reducer;
