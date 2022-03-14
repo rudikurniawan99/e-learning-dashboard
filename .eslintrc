@@ -14,7 +14,10 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "moduleDirectory": ["node_modules", "src/"]
+        "moduleDirectory": [
+          "node_modules",
+          "src/"
+        ]
       }
     }
   },
@@ -26,7 +29,11 @@
     },
     "ecmaVersion": 12
   },
-  "plugins": ["prettier", "react", "react-hooks"],
+  "plugins": [
+    "prettier",
+    "react",
+    "react-hooks"
+  ],
   "rules": {
     "react/jsx-filename-extension": 0,
     "no-param-reassign": 0,
@@ -47,7 +54,7 @@
       }
     ],
     "prettier/prettier": [
-      2,
+      0,
       {
         "bracketSpacing": true,
         "printWidth": 120,
