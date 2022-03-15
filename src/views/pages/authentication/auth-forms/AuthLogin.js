@@ -16,22 +16,32 @@ import {
 } from '@mui/material';
 
 // third party
-import * as Yup from 'yup';
-import { Formik } from 'formik';
+import * as yup from 'yup';
 
 // project imports
-import useScriptRef from 'hooks/useScriptRef';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-// ============================|| FIREBASE - LOGIN ||============================ //
+// config
+import config from 'config'
 
-const FirebaseLogin = ({ ...others }) => {
+// axios
+import axios from 'axios';
+
+// react-query
+import { useMutation } from 'react-query'
+
+// react-hook-form
+import { useForm } from 'react-hook-form';
+
+// hookform/resolvers
+import { yupResolver } from '@hookform/resolvers/yup'
+
+const AuthLogin = () => {
   const theme = useTheme();
-  const scriptedRef = useScriptRef();
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
@@ -42,126 +52,101 @@ const FirebaseLogin = ({ ...others }) => {
     event.preventDefault();
   };
 
+  const { mutate, data } = useMutation( async ( { email, password } ) => {
+    const data = await axios.post(`${config.baseApi}/auth/login`, {
+      email, password
+    })
+    return data
+  })
+
+  const validationSchema = yup.object().shape({
+    email: yup.string().max(255).email().required(),
+    password: yup.string().max(255).required()
+  }).required()
+
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(validationSchema)
+  })
+
+  const onSubmit = data => {
+    console.log(data);
+    console.log(errors);
+  }
+
   return (
     <>
-      <Formik
-        initialValues={{
-          email: '',
-          password: '',
-          submit: null
-        }}
-        validationSchema={Yup.object().shape({
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-          password: Yup.string().max(255).required('Password is required')
-        })}
-        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-          try {
-            if (scriptedRef.current) {
-              setStatus({ success: true });
-              setSubmitting(false);
-              console.log(values);
-            }
-          } catch (err) {
-            console.error(err);
-            if (scriptedRef.current) {
-              setStatus({ success: false });
-              setErrors({ submit: err.message });
-              setSubmitting(false);
-            }
-          }
-        }}
-      >
-        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-          <form noValidate onSubmit={handleSubmit} {...others}>
-            <FormControl
-              fullWidth
-              error={Boolean(touched.email && errors.email)}
-              sx={{ ...theme.typography.customInput }}
-            >
-              <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
-              <OutlinedInput
-                id="outlined-adornment-email-login"
-                type="email"
-                value={values.email}
-                name="email"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                label="Email Address / Username"
-                inputProps={{}}
-              />
-              {touched.email && errors.email && (
-                <FormHelperText error id="standard-weight-helper-text-email-login">
-                  {errors.email}
-                </FormHelperText>
-              )}
-            </FormControl>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <FormControl
+          fullWidth
+          error={Boolean(errors.email)}
+          sx={{ ...theme.typography.customInput }}
+        >
+          <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
+          <OutlinedInput
+            {...register('email')}
+            id="outlined-adornment-email-login"
+            label="Email Address / Username"
+          />
+          {errors.email && (
+            <FormHelperText error id="standard-weight-helper-text-email-login">
+              {errors.email?.message}
+            </FormHelperText>
+          )}
+        </FormControl>
 
-            <FormControl
-              fullWidth
-              error={Boolean(touched.password && errors.password)}
-              sx={{ ...theme.typography.customInput }}
-            >
-              <InputLabel htmlFor="outlined-adornment-password-login">Password</InputLabel>
-              <OutlinedInput
-                id="outlined-adornment-password-login"
-                type={showPassword ? 'text' : 'password'}
-                value={values.password}
-                name="password"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                      size="large"
-                    >
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                label="Password"
-                inputProps={{}}
-              />
-              {touched.password && errors.password && (
-                <FormHelperText error id="standard-weight-helper-text-password-login">
-                  {errors.password}
-                </FormHelperText>
-              )}
-            </FormControl>
-            <Stack direction="row" justifyContent="space-between" spacing={1}>
-              <Typography variant="subtitle1" color="secondary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
-                Forgot Password?
-              </Typography>
-            </Stack>
-            {errors.submit && (
-              <Box sx={{ mt: 3 }}>
-                <FormHelperText error>{errors.submit}</FormHelperText>
-              </Box>
-            )}
-
-            <Box sx={{ mt: 2 }}>
-              <AnimateButton>
-                <Button
-                  disableElevation
-                  disabled={isSubmitting}
-                  fullWidth
+        <FormControl
+          fullWidth
+          error={Boolean(errors.password)}
+          sx={{ ...theme.typography.customInput }}
+        >
+          <InputLabel htmlFor="outlined-adornment-password-login">Password</InputLabel>
+          <OutlinedInput
+            {...register('password')}
+            id="outlined-adornment-password-login"
+            type={showPassword ? 'text' : 'password'}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
                   size="large"
-                  type="submit"
-                  variant="contained"
-                  color="secondary"
                 >
-                  Sign in
-                </Button>
-              </AnimateButton>
-            </Box>
-          </form>
-        )}
-      </Formik>
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+          />
+          {errors.password && (
+            <FormHelperText error id="standard-weight-helper-text-password-login">
+              {errors.password?.message}
+            </FormHelperText>
+          )}
+        </FormControl>
+        <Stack direction="row" justifyContent="space-between" spacing={1}>
+          <Typography variant="subtitle1" color="secondary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
+            Forgot Password?
+          </Typography>
+        </Stack>
+        <Box sx={{ mt: 2 }}>
+          <AnimateButton>
+            <Button
+              disableElevation
+              fullWidth
+              size="large"
+              type="submit"
+              variant="contained"
+              color="secondary"
+            >
+              Sign in
+            </Button>
+          </AnimateButton>
+        </Box>
+      </form>
     </>
   );
 };
 
-export default FirebaseLogin;
+export default AuthLogin;
