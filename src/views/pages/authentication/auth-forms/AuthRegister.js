@@ -28,6 +28,16 @@ import { strengthColor, strengthIndicator } from 'utils/password-strength';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
+// react-query
+import { useMutation } from 'react-query';
+
+// axios
+import axios from 'axios';
+
+// config
+import config from 'config'
+
+
 // ===========================|| FIREBASE - REGISTER ||=========================== //
 
 const FirebaseRegister = ({ ...others }) => {
@@ -52,6 +62,12 @@ const FirebaseRegister = ({ ...others }) => {
     setLevel(strengthColor(temp));
   };
 
+  const { mutate } = useMutation( async({ name, email, password }) => {
+    await axios.post(`${config.baseApi}/auth/register`, {
+      name, email, password
+    })
+  })
+
   useEffect(() => {
     changePassword('123456');
   }, []);
@@ -73,6 +89,7 @@ const FirebaseRegister = ({ ...others }) => {
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
             if (scriptedRef.current) {
+              mutate(values)
               setStatus({ success: true });
               setSubmitting(false);
             }

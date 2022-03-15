@@ -12,13 +12,19 @@ import store from 'redux/store';
 // style + assets
 import 'assets/scss/style.scss';
 
+// react-query
+import { QueryClient, QueryClientProvider } from 'react-query'
+
 // ==============================|| REACT DOM RENDER  ||============================== //
+const queryClient = new QueryClient
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </QueryClientProvider>
   </Provider>,
   document.getElementById('root')
 );
