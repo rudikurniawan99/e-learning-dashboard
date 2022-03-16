@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
   Box,
   Button,
+  CircularProgress,
   FormControl,
   FormHelperText,
   IconButton,
@@ -39,6 +40,9 @@ import { useForm } from 'react-hook-form'
 // hookform/resolvers
 import { yupResolver } from '@hookform/resolvers/yup'
 
+// react-router-dom
+import { useNavigate } from 'react-router-dom'
+
 const AuthRegister = () => {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
@@ -51,7 +55,7 @@ const AuthRegister = () => {
     event.preventDefault();
   };
 
-  const { mutate } = useMutation( async({ name, email, password }) => {
+  const { mutate, data, isLoading, isSuccess } = useMutation( async({ name, email, password }) => {
     await axios.post(`${config.baseApi}/auth/register`, {
       name, email, password
     })
@@ -68,11 +72,27 @@ const AuthRegister = () => {
   })
 
   const onSubmit = (data) => {
-    console.log(data)
+    mutate(data)
+  }
+
+  const navigate = useNavigate()
+
+  if(isSuccess){
+    navigate('/')
   }
 
   return (
     <>
+      {isLoading && (
+        <Box 
+          sx={{
+            display: 'flex',
+            justifyContent: 'center'
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl
             fullWidth

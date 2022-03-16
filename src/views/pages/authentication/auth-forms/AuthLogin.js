@@ -12,6 +12,7 @@ import {
   InputLabel,
   OutlinedInput,
   Stack,
+  CircularProgress,
   Typography
 } from '@mui/material';
 
@@ -40,8 +41,16 @@ import { useForm } from 'react-hook-form';
 // hookform/resolvers
 import { yupResolver } from '@hookform/resolvers/yup'
 
+// react-router-dom
+import { useNavigate } from 'react-router-dom'
+
+// react-redux
+import { useDispatch } from 'react-redux';
+
 const AuthLogin = () => {
   const theme = useTheme();
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
@@ -52,7 +61,7 @@ const AuthLogin = () => {
     event.preventDefault();
   };
 
-  const { mutate, data } = useMutation( async ( { email, password } ) => {
+  const { mutate, isLoading, data, isSuccess } = useMutation( async ( { email, password } ) => {
     const data = await axios.post(`${config.baseApi}/auth/login`, {
       email, password
     })
@@ -63,18 +72,36 @@ const AuthLogin = () => {
     email: yup.string().max(255).email().required(),
     password: yup.string().max(255).required()
   }).required()
-
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(validationSchema)
   })
 
   const onSubmit = data => {
-    console.log(data);
-    console.log(errors);
+    mutate(data)
+  }
+
+
+  if(isSuccess){
+    // data = data.data.data
+    console.log(data.data.data);
+    // const payload = data.data.data
+    // dispatch({ 
+    //   type: 'UPDATE_CURRENT_USER',
+    //   id: payload.id,
+    //   name: payload.name,
+    //   email: payload.email,
+    //   role: payload.role
+    // })
+    navigate('/')
   }
 
   return (
     <>
+      {isLoading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <CircularProgress />
+        </Box>
+      )}
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl
           fullWidth
