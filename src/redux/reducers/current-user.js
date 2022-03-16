@@ -5,7 +5,7 @@ const initialState = { id: '', name: '', email: '', role: '' };
 export default (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_CURRENT_USER:
-      return { ...state, ...action.payload };
+      return { ...state, ...action };
     case RESET_CURRENT_USER:
       return { ...state };
     default:

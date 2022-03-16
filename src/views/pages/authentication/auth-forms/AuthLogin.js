@@ -47,6 +47,8 @@ import { useNavigate } from 'react-router-dom'
 // react-redux
 import { useDispatch } from 'react-redux';
 
+import { UPDATE_CURRENT_USER } from 'redux/types';
+
 const AuthLogin = () => {
   const theme = useTheme();
   const dispatch = useDispatch()
@@ -82,16 +84,15 @@ const AuthLogin = () => {
 
 
   if(isSuccess){
-    // data = data.data.data
-    console.log(data.data.data);
-    // const payload = data.data.data
-    // dispatch({ 
-    //   type: 'UPDATE_CURRENT_USER',
-    //   id: payload.id,
-    //   name: payload.name,
-    //   email: payload.email,
-    //   role: payload.role
-    // })
+    const payload = data.data.data
+    console.log(payload);
+    dispatch({ 
+      type: UPDATE_CURRENT_USER,
+      id: payload.id,
+      name: payload.name,
+      email: payload.email,
+      role: payload.role
+    })
     navigate('/')
   }
 
