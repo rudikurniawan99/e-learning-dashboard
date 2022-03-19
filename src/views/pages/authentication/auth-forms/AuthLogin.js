@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -42,7 +42,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigate } from 'react-router-dom'
 
 // react-redux
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 // redux/types
 import { UPDATE_CURRENT_USER } from 'redux/types';
@@ -50,6 +50,7 @@ import { UPDATE_CURRENT_USER } from 'redux/types';
 const AuthLogin = () => {
   const theme = useTheme();
   const dispatch = useDispatch()
+  const user = useSelector((state) => state.currentUser)
   const navigate = useNavigate()
 
   const [showPassword, setShowPassword] = useState(false);
@@ -88,6 +89,12 @@ const AuthLogin = () => {
   const onSubmit = data => {
     mutate(data)
   }
+
+  useEffect(() => {
+    if(user.name){
+      navigate('/')
+    }
+  }, [navigate, user.name])
 
   return (
     <>

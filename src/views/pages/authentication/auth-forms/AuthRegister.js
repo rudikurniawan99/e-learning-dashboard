@@ -29,10 +29,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useMutation } from 'react-query';
 
 // axios
-import axios from 'axios';
-
-// config
-import config from 'config'
+import axios from 'axiosConfig';
 
 // react-hook-form
 import { useForm } from 'react-hook-form'
@@ -63,7 +60,7 @@ const AuthRegister = () => {
   };
 
   const { mutate, isLoading } = useMutation( async({ name, email, password }) => {
-    await axios.post(`${config.baseApi}/auth/register`, {
+    await axios.post(`/auth/register`, {
       name, email, password
     })
   }, {

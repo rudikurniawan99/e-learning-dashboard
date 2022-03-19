@@ -106,7 +106,7 @@ const MainLayout = () => {
     if(!user.email){
       mutate()
     }
-  },[user])
+  },[user, mutate])
 
   return (
     <Box sx={{ display: 'flex' }}>
