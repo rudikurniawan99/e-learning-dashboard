@@ -41,7 +41,7 @@ const CreateAdminPage = () => {
 		email: yup.string().email().required()
 	})
 
-	const { register, handleSubmit, formState: { errors } } = useForm({
+	const { handleSubmit, formState: { errors } } = useForm({
 		resolver: yupResolver(createAdminSchema)
 	})
 
