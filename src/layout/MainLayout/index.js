@@ -17,6 +17,10 @@ import { SET_MENU } from 'redux/types';
 // assets
 import { IconChevronRight } from '@tabler/icons';
 
+import { useMutation } from 'react-query'
+import axios from 'axios';
+import config from 'config'
+
 // styles
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
   ...theme.typography.mainContent,
@@ -66,6 +70,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
 const MainLayout = () => {
   const theme = useTheme();
   const matchDownMd = useMediaQuery(theme.breakpoints.down('lg'));
+  const user = useSelector(state => state.currentUser)
 
   // Handle left drawer
   const leftDrawerOpened = useSelector((state) => state.customization.opened);
@@ -78,6 +83,18 @@ const MainLayout = () => {
     dispatch({ type: SET_MENU, opened: !matchDownMd });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matchDownMd]);
+
+  const { mutate } = useMutation( async () => axios.get(`${config.baseApi}/users/me`), {
+    onSuccess: (data) => {
+      console.log(data);
+    }
+  })
+
+  useEffect(() => {
+    if(!user.email){
+      mutate()
+    }
+  },[user])
 
   return (
     <Box sx={{ display: 'flex' }}>
