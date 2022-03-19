@@ -15,17 +15,18 @@ import 'assets/scss/style.scss';
 // react-query
 import { QueryClient, QueryClientProvider } from 'react-query'
 
+
 // ==============================|| REACT DOM RENDER  ||============================== //
-const queryClient = new QueryClient
+const queryClient = new QueryClient()
 
 ReactDOM.render(
-  <Provider store={store}>
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </QueryClientProvider>
-  </Provider>,
+  <QueryClientProvider client={queryClient}>
+    <Provider store={store}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+    </Provider>
+  </QueryClientProvider>,
   document.getElementById('root')
 );
 

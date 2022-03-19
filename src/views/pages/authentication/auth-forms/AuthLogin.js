@@ -47,6 +47,7 @@ import { useNavigate } from 'react-router-dom'
 // react-redux
 import { useDispatch } from 'react-redux';
 
+// redux/types
 import { UPDATE_CURRENT_USER } from 'redux/types';
 
 const AuthLogin = () => {
@@ -63,11 +64,20 @@ const AuthLogin = () => {
     event.preventDefault();
   };
 
-  const { mutate, isLoading, data, isSuccess } = useMutation( async ( { email, password } ) => {
-    const data = await axios.post(`${config.baseApi}/auth/login`, {
-      email, password
+  const { mutate, isLoading } = useMutation( async ( { email, password } ) => axios.post(`${config.baseApi}/auth/login`, {
+    email, password
+  }), {
+    onSuccess: (data) => {
+      const payload = data.data.data
+    dispatch({ 
+      type: UPDATE_CURRENT_USER,
+      id: payload.id,
+      name: payload.name,
+      email: payload.email,
+      role: payload.role
     })
-    return data
+      navigate('/')
+    }
   })
 
   const validationSchema = yup.object().shape({
@@ -80,20 +90,6 @@ const AuthLogin = () => {
 
   const onSubmit = data => {
     mutate(data)
-  }
-
-
-  if(isSuccess){
-    const payload = data.data.data
-    console.log(payload);
-    dispatch({ 
-      type: UPDATE_CURRENT_USER,
-      id: payload.id,
-      name: payload.name,
-      email: payload.email,
-      role: payload.role
-    })
-    navigate('/')
   }
 
   return (

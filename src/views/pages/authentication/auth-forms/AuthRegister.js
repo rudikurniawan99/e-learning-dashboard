@@ -62,10 +62,22 @@ const AuthRegister = () => {
     event.preventDefault();
   };
 
-  const { mutate, data, isLoading, isSuccess } = useMutation( async({ name, email, password }) => {
+  const { mutate, isLoading } = useMutation( async({ name, email, password }) => {
     await axios.post(`${config.baseApi}/auth/register`, {
       name, email, password
     })
+  }, {
+    onSuccess: (data) => {
+      const payload = data.data.data
+      dispatch({ 
+        type: UPDATE_CURRENT_USER,
+        id: payload.id,
+        name: payload.name,
+        email: payload.email,
+        role: payload.role
+      }) 
+      navigate('/')
+    }
   })
 
   const registerSchema = yup.object().shape({
@@ -80,19 +92,6 @@ const AuthRegister = () => {
 
   const onSubmit = (data) => {
     mutate(data)
-  }
-
-
-  if(isSuccess){
-    const payload = data.data.data
-    dispatch({ 
-      type: UPDATE_CURRENT_USER,
-      id: payload.id,
-      name: payload.name,
-      email: payload.email,
-      role: payload.role
-    }) 
-    navigate('/')
   }
 
   return (
