@@ -87,21 +87,19 @@ const MainLayout = () => {
 
   const { mutate } = useMutation( async () => axios.get(`/users/me`), {
     onSuccess: (data) => {
-      if(data){
-        console.log(data);
-        const payload = data.data.user
-        dispatch({
-          type: UPDATE_CURRENT_USER,
-          id: payload.id,
-          name: payload.name,
-          email: payload.email,
-          role: payload.role
-        })
-        navigate(location)
-      }else{
-        navigate('/login')
-      }
+      const payload = data.data.user
+      dispatch({
+        type: UPDATE_CURRENT_USER,
+        id: payload.id,
+        name: payload.name,
+        email: payload.email,
+        role: payload.role
+      })
+      navigate(location)
     },
+    onError: () => {
+      navigate('/login')
+    }
   })
 
   useEffect(() => {

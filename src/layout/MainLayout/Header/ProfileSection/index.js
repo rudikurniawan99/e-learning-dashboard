@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -32,12 +32,19 @@ import User1 from 'assets/images/users/user-round.svg';
 // assets
 import { IconLogout, IconSettings, IconUser } from '@tabler/icons';
 
+// react-query
+import { useMutation } from 'react-query';
+import axios from 'axiosConfig'
+import { UPDATE_CURRENT_USER } from 'redux/types'
+
 // ==============================|| PROFILE MENU ||============================== //
 
 const ProfileSection = () => {
   const theme = useTheme();
   const customization = useSelector((state) => state.customization);
   const navigate = useNavigate();
+  const user = useSelector(state => state.currentUser)
+  const dispatch = useDispatch()
 
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
@@ -45,8 +52,21 @@ const ProfileSection = () => {
    * anchorRef is used on different componets and specifying one type leads to other components throwing an error
    * */
   const anchorRef = useRef(null);
-  const handleLogout = async () => {
-    console.log('Logout');
+
+  const { mutate } = useMutation( async () => axios.post('/auth/logout'), {
+    onSuccess: () => {
+      dispatch({
+        type: UPDATE_CURRENT_USER,
+        id: '',
+        name: '',
+        email: '',
+        role: '' 
+      }) 
+    }
+  })
+
+  const handleLogout = () => {
+    mutate()
   };
 
   const handleClose = (event) => {
@@ -149,10 +169,10 @@ const ProfileSection = () => {
                       <Stack direction="row" spacing={0.5} alignItems="center">
                         <Typography variant="h4">Good Morning,</Typography>
                         <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                          Johne Doe
+                          {user.name}
                         </Typography>
                       </Stack>
-                      <Typography variant="subtitle2">Project Admin</Typography>
+                      <Typography variant="subtitle2">{user.role === 'USER' ? 'User' : 'Admin'}</Typography>
                     </Stack>
                   </Box>
                   <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
