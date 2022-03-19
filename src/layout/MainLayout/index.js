@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 
 // material-ui
 import { styled, useTheme } from '@mui/material/styles';
@@ -12,14 +12,13 @@ import Header from './Header';
 import Sidebar from './Sidebar';
 import navigation from 'menu-items';
 import { drawerWidth } from 'redux/constant';
-import { SET_MENU } from 'redux/types';
+import { SET_MENU, UPDATE_CURRENT_USER } from 'redux/types';
 
 // assets
 import { IconChevronRight } from '@tabler/icons';
 
 import { useMutation } from 'react-query'
-import axios from 'axios';
-import config from 'config'
+import axios from 'axiosConfig';
 
 // styles
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
@@ -71,6 +70,8 @@ const MainLayout = () => {
   const theme = useTheme();
   const matchDownMd = useMediaQuery(theme.breakpoints.down('lg'));
   const user = useSelector(state => state.currentUser)
+  const navigate = useNavigate()
+  const location = useLocation()
 
   // Handle left drawer
   const leftDrawerOpened = useSelector((state) => state.customization.opened);
@@ -84,10 +85,23 @@ const MainLayout = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matchDownMd]);
 
-  const { mutate } = useMutation( async () => axios.get(`${config.baseApi}/users/me`), {
+  const { mutate } = useMutation( async () => axios.get(`/users/me`), {
     onSuccess: (data) => {
-      console.log(data);
-    }
+      if(data){
+        console.log(data);
+        const payload = data.data.user
+        dispatch({
+          type: UPDATE_CURRENT_USER,
+          id: payload.id,
+          name: payload.name,
+          email: payload.email,
+          role: payload.role
+        })
+        navigate(location)
+      }else{
+        navigate('/login')
+      }
+    },
   })
 
   useEffect(() => {

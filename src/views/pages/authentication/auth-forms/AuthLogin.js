@@ -26,11 +26,8 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-// config
-import config from 'config'
-
 // axios
-import axios from 'axios';
+import axios from 'axiosConfig';
 
 // react-query
 import { useMutation } from 'react-query'
@@ -64,7 +61,7 @@ const AuthLogin = () => {
     event.preventDefault();
   };
 
-  const { mutate, isLoading } = useMutation( async ( { email, password } ) => axios.post(`${config.baseApi}/auth/login`, {
+  const { mutate, isLoading } = useMutation( async ( { email, password } ) => axios.post(`/auth/login`, {
     email, password
   }), {
     onSuccess: (data) => {
