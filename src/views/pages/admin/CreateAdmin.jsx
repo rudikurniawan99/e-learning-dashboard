@@ -1,3 +1,4 @@
+import { useState } from 'react';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -5,11 +6,10 @@ import {
 	Button,
 	FormControl,
 	FormHelperText,
-	Grid,
+	IconButton,
+	InputAdornment,
 	InputLabel,
 	OutlinedInput,
-	TextField,
-	useMediaQuery
 } from '@mui/material';
 
 // third party
@@ -23,6 +23,7 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import MainCard from 'ui-component/cards/MainCard';
 import { Link } from 'react-router-dom';
 import { IconArrowBackUp } from '@tabler/icons';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 // react-hook-form
 import { useForm } from 'react-hook-form'
@@ -34,14 +35,18 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 const CreateAdminPage = () => {
 	const theme = useTheme();
-	const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-
+	const [showPassword, setShowPassword] = useState(false)
 	const createAdminSchema = yup.object().shape({
 		name: yup.string().required(),
-		email: yup.string().email().required()
+		email: yup.string().email().required(),
+		password: yup.string().min(8).max(255).required()
 	})
 
-	const { handleSubmit, formState: { errors } } = useForm({
+	const handleShowPassword = () => {
+		setShowPassword(!showPassword)
+	}
+
+	const { register, handleSubmit, formState: { errors } } = useForm({
 		resolver: yupResolver(createAdminSchema)
 	})
 
@@ -51,36 +56,28 @@ const CreateAdminPage = () => {
 		<MainCard
 			title="New Admin"
 			secondary={
-				<Button component={Link} to={-1} endIcon={<IconArrowBackUp />}>
+				<Button component={Link} to="/admin" endIcon={<IconArrowBackUp />}>
 					Go Back
 				</Button>
 			}
 		>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<Grid container spacing={matchDownSM ? 0 : 2}>
-					<Grid item xs={12} sm={6}>
-						<TextField
-							fullWidth
-							label="First Name"
-							margin="normal"
-							name="fname"
-							type="text"
-							defaultValue=""
-							sx={{ ...theme.typography.customInput }}
-						/>
-					</Grid>
-					<Grid item xs={12} sm={6}>
-						<TextField
-							fullWidth
-							label="Last Name"
-							margin="normal"
-							name="lname"
-							type="text"
-							defaultValue=""
-							sx={{ ...theme.typography.customInput }}
-						/>
-					</Grid>
-				</Grid>
+				<FormControl
+					fullWidth
+					error={Boolean(errors.name)}
+					sx={{ ...theme.typography.customInput }}
+				>
+					<InputLabel htmlFor="outlined-adornment-name-register">Name</InputLabel>
+					<OutlinedInput
+						id="outlined-adornment-name-register"
+						{...register('name')}
+					/>
+					{errors.name && (
+						<FormHelperText error id="standard-weight-helper-text--register">
+							{errors.name?.message}
+						</FormHelperText>
+					)}
+				</FormControl>
 				<FormControl
 					fullWidth
 					error={Boolean(errors.email)}
@@ -89,6 +86,7 @@ const CreateAdminPage = () => {
 					<InputLabel htmlFor="outlined-adornment-email-register">Email Address / Username</InputLabel>
 					<OutlinedInput
 						id="outlined-adornment-email-register"
+						{...register('email')}
 					/>
 					{errors.email && (
 						<FormHelperText error id="standard-weight-helper-text--register">
@@ -96,7 +94,32 @@ const CreateAdminPage = () => {
 						</FormHelperText>
 					)}
 				</FormControl>
-
+				<FormControl
+					fullWidth
+					error={Boolean(errors.password)}
+					sx={{ ...theme.typography.customInput }}
+				>
+					<InputLabel htmlFor="outlined-adornment-password-register">Password</InputLabel>
+					<OutlinedInput
+						id="outlined-adornment-password-register"
+						{...register('password')}
+						type={showPassword ? 'text' : 'password'}
+						endAdornment={
+							<InputAdornment position='end'>
+								<IconButton
+									onClick={handleShowPassword}
+								>
+									{showPassword ? <Visibility /> : <VisibilityOff />}
+								</IconButton>
+							</InputAdornment>
+						}
+					/>
+					{errors.password && (
+						<FormHelperText error id="standard-weight-helper-text--register">
+							{errors.password?.message}
+						</FormHelperText>
+					)}
+				</FormControl>
 				<Box sx={{ mt: 2 }}>
 					<AnimateButton>
 						<Button

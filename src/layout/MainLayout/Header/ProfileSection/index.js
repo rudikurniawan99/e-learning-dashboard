@@ -62,6 +62,7 @@ const ProfileSection = () => {
         email: '',
         role: '' 
       }) 
+      navigate('/login')
     }
   })
 
