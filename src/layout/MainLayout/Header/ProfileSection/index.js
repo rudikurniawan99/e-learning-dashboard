@@ -60,7 +60,8 @@ const ProfileSection = () => {
         id: '',
         name: '',
         email: '',
-        role: '' 
+        role: '',
+        profile: ''
       }) 
       navigate('/login')
     }

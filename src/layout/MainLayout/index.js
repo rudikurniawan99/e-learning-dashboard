@@ -93,7 +93,8 @@ const MainLayout = () => {
         id: payload.id,
         name: payload.name,
         email: payload.email,
-        role: payload.role
+        role: payload.role,
+        profile: payload.image.path
       })
       navigate(location)
     },

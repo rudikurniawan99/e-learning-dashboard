@@ -72,6 +72,7 @@ const AuthLogin = () => {
       id: payload.id,
       name: payload.name,
       email: payload.email,
+      profile: payload.image.path,
       role: payload.role
     })
       navigate('/')
