@@ -11,6 +11,7 @@ const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')))
 const AdminPage = Loadable(lazy(() => import('views/pages/admin')));
 const CreateAdminPage = Loadable(lazy(() => import('views/pages/admin/CreateAdmin')));
 const ProfilePage = Loadable(lazy(() => import('views/pages/profile')));
+const CoursesPage = Loadable(lazy(() =>  import('views/pages/courses')))
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
@@ -26,16 +27,20 @@ const MainRoutes = {
       element: <DashboardDefault />
     },
     {
-      path: '/admin',
-      element: <AdminPage />
-    },
-    {
       path: '/profile',
       element: <ProfilePage />
     },
     {
+      path: '/admin',
+      element: <AdminPage />
+    },
+    {
       path: '/admin/create',
       element: <CreateAdminPage />
+    },
+    {
+      path: '/admin/courses',
+      element: <CoursesPage />
     },
     {
       path: '/sample-page',

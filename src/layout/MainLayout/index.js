@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 // material-ui
 import { styled, useTheme } from '@mui/material/styles';
@@ -71,7 +71,6 @@ const MainLayout = () => {
   const matchDownMd = useMediaQuery(theme.breakpoints.down('lg'));
   const user = useSelector(state => state.currentUser)
   const navigate = useNavigate()
-  const location = useLocation()
 
   // Handle left drawer
   const leftDrawerOpened = useSelector((state) => state.customization.opened);
@@ -96,7 +95,6 @@ const MainLayout = () => {
         role: payload.role,
         profile: payload.image.path
       })
-      navigate(location)
     },
     onError: () => {
       navigate('/login')

@@ -1,8 +1,8 @@
 // assets
-import { IconDashboard, IconTerminal2 } from '@tabler/icons';
+import { IconDashboard, IconTerminal2, IconCertificate } from '@tabler/icons';
 
 // constant
-const icons = { IconDashboard, IconTerminal2 };
+const icons = { IconDashboard, IconTerminal2, IconCertificate };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -26,6 +26,14 @@ const dashboard = {
       url: '/admin',
       icon: icons.IconTerminal2,
       breadcrumbs: false
+    },
+    {
+      id: 'courses',
+      title: 'Courses',
+      type: 'item',
+      url: '/admin/courses',
+      icon: icons.IconCertificate,
+      breadcrumbs: false 
     }
   ]
 };

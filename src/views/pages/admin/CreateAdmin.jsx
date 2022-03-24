@@ -21,7 +21,7 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 
 // assets
 import MainCard from 'ui-component/cards/MainCard';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { IconArrowBackUp } from '@tabler/icons';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
@@ -31,10 +31,15 @@ import { useForm } from 'react-hook-form'
 // hookform/resolvers
 import { yupResolver } from '@hookform/resolvers/yup'
 
+import { useMutation } from 'react-query';
+import axios from 'axiosConfig'
+import config from 'config'
+
 // ==============================|| SAMPLE PAGE ||============================== //
 
 const CreateAdminPage = () => {
 	const theme = useTheme();
+	const navigate = useNavigate()
 	const [showPassword, setShowPassword] = useState(false)
 	const createAdminSchema = yup.object().shape({
 		name: yup.string().required(),
@@ -50,7 +55,18 @@ const CreateAdminPage = () => {
 		resolver: yupResolver(createAdminSchema)
 	})
 
-	const onSubmit = (data) => console.log(data);
+	const { mutate } = useMutation(async (data) => axios.post(`${config.baseApi}/users`, {
+		...data,
+		role: 'COORDINATOR'
+	}), {
+		onSuccess: () => {
+			navigate('/admin')
+		}
+	})
+
+	const onSubmit = (data) => {
+		mutate(data)
+	};
 
 	return (
 		<MainCard
