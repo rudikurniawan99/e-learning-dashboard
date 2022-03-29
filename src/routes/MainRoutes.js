@@ -3,6 +3,7 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
+import CreateCoursePage from 'views/pages/courses/CreateCourse';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -41,6 +42,10 @@ const MainRoutes = {
     {
       path: '/admin/courses',
       element: <CoursesPage />
+    },
+    {
+      path: '/admin/courses/create',
+      element: <CreateCoursePage />
     },
     {
       path: '/sample-page',

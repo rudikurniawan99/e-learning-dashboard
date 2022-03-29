@@ -93,7 +93,7 @@ const MainLayout = () => {
         name: payload.name,
         email: payload.email,
         role: payload.role,
-        profile: payload.image.path
+        profile: payload.image?.path
       })
     },
     onError: () => {

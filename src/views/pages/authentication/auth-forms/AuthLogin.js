@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -41,16 +41,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 // react-router-dom
 import { useNavigate } from 'react-router-dom'
 
-// react-redux
-import { useDispatch, useSelector } from 'react-redux';
-
-// redux/types
-import { UPDATE_CURRENT_USER } from 'redux/types';
-
 const AuthLogin = () => {
   const theme = useTheme();
-  const dispatch = useDispatch()
-  const user = useSelector((state) => state.currentUser)
   const navigate = useNavigate()
 
   const [showPassword, setShowPassword] = useState(false);
@@ -65,16 +57,7 @@ const AuthLogin = () => {
   const { mutate, isLoading } = useMutation( async ( { email, password } ) => axios.post(`/auth/login`, {
     email, password
   }), {
-    onSuccess: (data) => {
-      const payload = data.data.data
-    dispatch({ 
-      type: UPDATE_CURRENT_USER,
-      id: payload.id,
-      name: payload.name,
-      email: payload.email,
-      profile: payload.image.path,
-      role: payload.role
-    })
+    onSuccess: () => {
       navigate('/')
     }
   })
@@ -90,12 +73,6 @@ const AuthLogin = () => {
   const onSubmit = data => {
     mutate(data)
   }
-
-  useEffect(() => {
-    if(user.name){
-      navigate('/')
-    }
-  }, [navigate, user.name])
 
   return (
     <>

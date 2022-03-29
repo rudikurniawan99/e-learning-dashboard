@@ -40,15 +40,9 @@ import { yupResolver } from '@hookform/resolvers/yup'
 // react-router-dom
 import { useNavigate } from 'react-router-dom'
 
-// react-redux
-import { useDispatch } from 'react-redux';
-
-import { UPDATE_CURRENT_USER } from 'redux/types';
-
 const AuthRegister = () => {
   const theme = useTheme();
   const navigate = useNavigate()
-  const dispatch = useDispatch()
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => {
@@ -64,16 +58,7 @@ const AuthRegister = () => {
       name, email, password
     })
   }, {
-    onSuccess: (data) => {
-      const payload = data.data.data
-      dispatch({ 
-        type: UPDATE_CURRENT_USER,
-        id: payload.id,
-        name: payload.name,
-        email: payload.email,
-        profile: payload.image.path,
-        role: payload.role
-      }) 
+    onSuccess: () => {
       navigate('/')
     }
   })
