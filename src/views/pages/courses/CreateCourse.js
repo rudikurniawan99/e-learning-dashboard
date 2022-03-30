@@ -1,4 +1,4 @@
-import { Button, FormControl, InputLabel, OutlinedInput, Select, MenuItem, Box, Dialog, DialogTitle, DialogActions, DialogContent, TextField } from '@mui/material'
+import { Button, FormControl, InputLabel, OutlinedInput, Select, MenuItem, Box, Dialog, DialogTitle, DialogActions, DialogContent, TextField, FormHelperText } from '@mui/material'
 import { useState } from 'react'
 import MainCard from 'ui-component/cards/MainCard'
 import { Link, useNavigate } from 'react-router-dom'
@@ -15,26 +15,11 @@ const CreateCoursePage = () => {
   const theme = useTheme()
   const navigate = useNavigate()
   const { id: userId } = useSelector(state => state.currentUser)
-  const formElements = [
-    {
-      id: 'name',
-      placeholder: 'Name'
-    },
-    {
-      id: 'description',
-      placeholder: 'Description'
-    },
-    {
-      id: 'price',
-      placeholder: 'Price'
-    }
-  ]
-
   const validationSchema = yup.object({
-    name: yup.string(),
-    description: yup.string(),
-    price: yup.number(),
-    category: yup.array(yup.string())
+    name: yup.string().required(),
+    description: yup.string().required(),
+    price: yup.number().positive('must be a valid amount').required(),
+    category: yup.array(yup.string()).required()
   }).required()
 
   const { register, handleSubmit, formState: { errors } } = useForm({
@@ -81,18 +66,52 @@ const CreateCoursePage = () => {
       <form
         onSubmit={handleSubmit(onSubmit)} 
       >
-        {formElements.map((elm) => (
-          <FormControl
-            fullWidth 
-            sx={{ ...theme.typography.customInput }}
-            key={elm.id}
-          >
-            <InputLabel htmlFor={elm.id}>{elm.placeholder}</InputLabel>
-            <OutlinedInput
-              {...register(elm.id)} 
-            />
-          </FormControl>
-        ))}
+        <FormControl
+          fullWidth 
+          sx={{ ...theme.typography.customInput }}
+          error={Boolean(errors.name)}
+        >
+          <InputLabel htmlFor='name'>Name</InputLabel>
+          <OutlinedInput
+            {...register('name')} 
+          />
+          {errors?.name && (
+            <FormHelperText
+              error
+            >{errors?.name?.message}</FormHelperText>
+          )} 
+        </FormControl>
+        <FormControl
+          fullWidth 
+          sx={{ ...theme.typography.customInput }}
+          error={Boolean(errors.description)}
+        >
+          <InputLabel htmlFor='description'>Description</InputLabel>
+          <OutlinedInput
+            {...register('description')} 
+            multiline
+          />
+          {errors?.description && (
+            <FormHelperText
+              error
+            >{errors?.description?.message}</FormHelperText>
+          )} 
+        </FormControl>
+        <FormControl
+          fullWidth 
+          sx={{ ...theme.typography.customInput }}
+          error={Boolean(errors.price)}
+        >
+          <InputLabel htmlFor='price'>Price</InputLabel>
+          <OutlinedInput
+            {...register('price')} 
+          />
+          {errors?.price && (
+            <FormHelperText
+              error
+            >{errors?.price?.message}</FormHelperText>
+          )} 
+        </FormControl>
         <Box
           display='flex' 
           sx={{
@@ -104,6 +123,7 @@ const CreateCoursePage = () => {
           <FormControl
             fullWidth
             sx={{ ...theme.typography.customInput }}
+            error={Boolean(errors?.category)}
           >
             <InputLabel htmlFor='category'>Category</InputLabel>
             <Select
@@ -116,6 +136,11 @@ const CreateCoursePage = () => {
                 <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
               ))}
             </Select>
+            {errors?.category && (
+              <FormHelperText
+                error 
+              >{errors?.category?.message}</FormHelperText>
+            )}
           </FormControl>
           <CategoryInput/> 
         </Box>
