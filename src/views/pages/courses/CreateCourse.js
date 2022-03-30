@@ -11,6 +11,8 @@ import { useMutation, useQuery } from 'react-query'
 import axios from 'axiosConfig'
 import { useSelector } from 'react-redux'
 
+// bug 1 : while input category error , course input also detect error, 
+
 const CreateCoursePage = () => {
   const theme = useTheme()
   const navigate = useNavigate()
@@ -207,6 +209,12 @@ const CategoryInput = () => {
               fullWidth
               variant="standard"
             />
+            {/* bug 1  */}
+            {errors?.name && (
+              <FormHelperText
+                error
+              >{errors?.name?.message}</FormHelperText>
+            )}
           </DialogContent>
           <DialogActions>
             <Button onClick={closeHandler}>Cancel</Button>
